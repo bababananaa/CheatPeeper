@@ -1,2 +1,8 @@
 #!! change to the packages actually needed !!
+
+fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg[binary]
+python-dotenv
 pytest==8.3.3
