@@ -1,7 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
-from sqlalchemy import text
-from database import engine
+from database import engine, get_db
+from models import User
+from schemas import UserCreate, UserResponse
+from security import hash_password
 
 app = FastAPI()
 
@@ -27,3 +31,42 @@ def database_check():
         "status": "connected",
         "database": database_name
     }
+
+
+@app.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
+    hashed_password = hash_password(user_data.password)
+
+    new_user = User(
+        username=user_data.username,
+        email=str(user_data.email),
+        password_hash=hashed_password,
+        role="student",
+    )
+
+    db.add(new_user)
+
+    try: 
+        db.commit()
+        db.refresh(new_user)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Username or email already exists"
+        )
+    
+    return new_user
+
+
+@app.get("/users/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.get(User, user_id)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    return user
