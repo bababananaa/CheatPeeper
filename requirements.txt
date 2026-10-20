@@ -5,4 +5,9 @@ uvicorn[standard]
 sqlalchemy
 psycopg[binary]
 python-dotenv
+pwdlib[argon2]
+email-validator
+pyjwt
+python-multipart
+httpx
 pytest==8.3.3
