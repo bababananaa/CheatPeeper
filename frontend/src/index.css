@@ -1,0 +1,55 @@
+/*
+  Global styles for the whole app.
+
+  We use Tailwind CSS: instead of writing CSS classes by hand, we put small
+  ready-made classes right on the elements (e.g. "rounded-xl bg-white p-8").
+  This line pulls in all of Tailwind.
+*/
+@import "tailwindcss";
+
+/*
+  @theme lets us add our own design values to Tailwind.
+  Anything defined here becomes a class we can use in the components.
+*/
+@theme {
+  /*
+    Apple's system font (San Francisco) on Apple devices, with close
+    fallbacks everywhere else. Overriding --font-sans makes it the default
+    font for the whole app.
+  */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /*
+    Our brand color: a light turquoise blue.
+    Lower numbers are lighter, higher numbers are darker.
+    Defining these gives us classes like bg-turquoise-600 and text-turquoise-700.
+  */
+  --color-turquoise-50: #eefbfc;
+  --color-turquoise-100: #d4f4f7;
+  --color-turquoise-200: #aee8ef;
+  --color-turquoise-300: #79d7e3;
+  --color-turquoise-400: #3fc3d3;
+  --color-turquoise-500: #1ca9bc;
+  --color-turquoise-600: #169bae; /* main button color */
+  --color-turquoise-700: #0e7c8a; /* text links (darker so it's easy to read) */
+
+  /* A gentle "fade and float up" animation, used as the class animate-fade-in */
+  --animate-fade-in: fade-in 0.5s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Makes text look crisp and smooth, like it does on iOS */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
